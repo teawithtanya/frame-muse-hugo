@@ -1,0 +1,67 @@
+{{ define "head" }}{{ partials.Include "frame-muse/head.html" . }}{{ end }}
+{{ define "header" }}{{ partials.Include "frame-muse/header.html" . }}{{ end }}
+{{ define "main" }}
+<section class="gallery-container">
+  <div class="container">
+    <header class="page-header">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.subtitle }}
+      <p class="subtitle">{{ . }}</p>
+      {{ end }}
+    </header>
+
+    {{ with .Params.contributors }}
+    <div class="contributors-grid">
+      {{ range . }}
+      <article class="contributor-card">
+        <div class="contributor-photo">
+          <img src="{{ .image }}" alt="{{ .name }}">
+        </div>
+        <div class="contributor-info">
+          <h3>{{ .name }}</h3>
+          <p class="role">{{ .role }}</p>
+          <p class="bio">{{ .bio }}</p>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+    {{ else }}
+    <div class="contributors-grid">
+      <article class="contributor-card">
+        <div class="contributor-photo">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+            alt="Alex Chen">
+        </div>
+        <div class="contributor-info">
+          <h3>Alex Chen</h3>
+          <p class="role">Landscape & Nature Photographer</p>
+          <p class="bio">Alex is a passionate landscape photographer with over a decade of experience capturing the
+            world's most breathtaking natural wonders.</p>
+        </div>
+      </article>
+      <article class="contributor-card">
+        <div class="contributor-photo">
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+            alt="Sara Martinez">
+        </div>
+        <div class="contributor-info">
+          <h3>Sara Martinez</h3>
+          <p class="role">Portrait & Street Photographer</p>
+          <p class="bio">Sara brings stories to life through intimate portraits and candid street photography with a
+            documentary mindset.</p>
+        </div>
+      </article>
+    </div>
+    {{ end }}
+
+    {{ if .Content }}
+    <div class="container">
+      <div class="subtitle">{{ .Content }}</div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}

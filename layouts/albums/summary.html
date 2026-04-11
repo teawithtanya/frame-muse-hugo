@@ -1,0 +1,25 @@
+{{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
+<article class="album-card">
+  <a href="{{ .RelPermalink }}" class="album-link">
+    <div class="album-cover">
+      {{ if $featuredImage }}
+      <img src="{{ $featuredImage }}" alt="{{ .Title }}">
+      {{ else }}
+      <img
+        src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+        alt="{{ .Title }}">
+      {{ end }}
+      <div class="album-overlay">
+        <span>View Album</span>
+      </div>
+    </div>
+    <div class="album-info">
+      <h3>{{ .Title }}</h3>
+      <div class="meta">
+        <span class="date">{{ .Date | time.Format (compare.Default "Jan 2006" site.Params.date_format) }}</span>
+        <span class="separator">&#8226;</span>
+        <span class="count">{{ len (.Resources.ByType "image") }} Photos</span>
+      </div>
+    </div>
+  </a>
+</article>

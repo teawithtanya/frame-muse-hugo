@@ -1,0 +1,84 @@
+{{ define "head" }}{{ partials.Include "frame-muse/head.html" . }}{{ end }}
+{{ define "header" }}{{ partials.Include "frame-muse/header.html" . }}{{ end }}
+{{ define "main" }}
+<section class="gallery-container">
+  <div class="container">
+    <header class="page-header">
+      <h2>{{ .Title }}</h2>
+      <p class="subtitle">
+        {{ .Date | time.Format (compare.Default "Jan 2006" site.Params.date_format) }} &#8226;
+        {{ len (.Resources.ByType "image") }} Photos
+      </p>
+    </header>
+
+    <div class="masonry-grid">
+      {{ $images := .Resources.ByType "image" }}
+      {{ if gt (len $images) 0 }}
+      {{ range $index, $img := $images }}
+      {{ $title := $img.Title | compare.Default (printf "Photo %d" (add $index 1)) }}
+      {{ $desc := $img.Params.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
+      {{ $shape := compare.Conditional (ge $img.Width $img.Height) "landscape" "portrait" }}
+      <div class="photo-item {{ $shape }}">
+        <img src="{{ $img.RelPermalink }}" alt="{{ $title }}">
+        <div class="photo-overlay">
+          <h4>{{ $title }}</h4>
+          <p>{{ $desc }}</p>
+        </div>
+      </div>
+      {{ end }}
+      {{ else }}
+      <div class="photo-item landscape">
+        <img
+          src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+          alt="Majestic Peaks">
+        <div class="photo-overlay">
+          <h4>Majestic Peaks</h4>
+          <p>The sun rises over the snow-capped mountains.</p>
+        </div>
+      </div>
+      <div class="photo-item portrait">
+        <img
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+          alt="Vertical Ascent">
+        <div class="photo-overlay">
+          <h4>Vertical Ascent</h4>
+          <p>A steep climb towards the summit.</p>
+        </div>
+      </div>
+      <div class="photo-item landscape">
+        <img
+          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+          alt="Valley Mist">
+        <div class="photo-overlay">
+          <h4>Valley Mist</h4>
+          <p>Morning fog rolling through the valley.</p>
+        </div>
+      </div>
+      <div class="photo-item portrait">
+        <img
+          src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+          alt="Alpine Glow">
+        <div class="photo-overlay">
+          <h4>Alpine Glow</h4>
+          <p>Soft light hitting the rock face.</p>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-close" onclick="window.frameMuseLightbox.closeLightbox()">&times;</button>
+  <button class="lightbox-nav lightbox-prev" onclick="window.frameMuseLightbox.changeImage(-1)">&#10094;</button>
+  <img src="" alt="" class="lightbox-content" id="lightbox-img">
+  <div class="lightbox-caption">
+    <h3 id="lightbox-title"></h3>
+    <p id="lightbox-desc"></p>
+  </div>
+  <button class="lightbox-nav lightbox-next" onclick="window.frameMuseLightbox.changeImage(1)">&#10095;</button>
+</div>
+
+<script src="{{ "frame-muse/script.js" | urls.RelURL }}"></script>
+{{ end }}
+{{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}
