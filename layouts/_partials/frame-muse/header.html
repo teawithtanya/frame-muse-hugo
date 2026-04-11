@@ -1,0 +1,17 @@
+<header class="site-header">
+  <div class="container">
+    <h1 class="logo"><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></h1>
+    <nav class="main-nav">
+      <ul>
+        {{ $homeActive := and .IsHome (ne .Type "albums") (ne .Type "album") (ne .Type "about") }}
+        <li><a href="{{ site.Home.RelPermalink }}"{{ if $homeActive }} class="active"{{ end }}>Home</a></li>
+        {{ with site.GetPage "/albums" }}
+          <li><a href="{{ .RelPermalink }}"{{ if or (eq $.Type "albums") (eq $.Type "album") }} class="active"{{ end }}>Albums</a></li>
+        {{ end }}
+        {{ with site.GetPage "/about" }}
+          <li><a href="{{ .RelPermalink }}"{{ if eq $.Type "about" }} class="active"{{ end }}>About</a></li>
+        {{ end }}
+      </ul>
+    </nav>
+  </div>
+</header>
