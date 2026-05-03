@@ -38,22 +38,9 @@
     {{ end }}
   {{ end }}
   {{ if eq $linkToCover "" }}
-    {{ range .Params.resources }}
-      {{ $src := printf "%v" .src }}
-      {{ if and (eq $linkToCover "") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
-        {{ $linkToCover = $src }}
-      {{ end }}
-    {{ end }}
-  {{ end }}
-  {{ if eq $linkToCover "" }}
-    {{ range .Params.photos }}
-      {{ $src := printf "%v" .src }}
-      {{ if eq $src "<nil>" }}
-        {{ $src = printf "%v" .url }}
-      {{ end }}
-      {{ if and (eq $linkToCover "") (ne $src "<nil>") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
-        {{ $linkToCover = $src }}
-      {{ end }}
+    {{ $externalImages := partials.Include "func/GetAlbumExternalImages.html" . }}
+    {{ with first 1 $externalImages }}
+      {{ $linkToCover = (index . 0).src }}
     {{ end }}
   {{ end }}
 {{ end }}

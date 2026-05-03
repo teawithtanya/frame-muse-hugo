@@ -1,0 +1,36 @@
+{{/*
+  GetAlbumExternalImages
+
+  Returns normalized external image entries from front matter. Supports:
+  - [[resources]] with src
+  - [[photos]] with src or url
+*/}}
+
+{{ $externalImages := slice }}
+
+{{ range .Params.resources }}
+  {{ $src := "" }}
+  {{ with .src }}
+    {{ $src = printf "%v" . }}
+  {{ end }}
+  {{ if and (ne $src "") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+    {{ $externalImages = $externalImages | append (dict "src" $src "title" .title "description" .description "shape" .shape "params" .params) }}
+  {{ end }}
+{{ end }}
+
+{{ range .Params.photos }}
+  {{ $src := "" }}
+  {{ with .src }}
+    {{ $src = printf "%v" . }}
+  {{ end }}
+  {{ if eq $src "" }}
+    {{ with .url }}
+      {{ $src = printf "%v" . }}
+    {{ end }}
+  {{ end }}
+  {{ if and (ne $src "") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+    {{ $externalImages = $externalImages | append (dict "src" $src "title" .title "description" .description "shape" .shape "params" .params) }}
+  {{ end }}
+{{ end }}
+
+{{ return $externalImages }}

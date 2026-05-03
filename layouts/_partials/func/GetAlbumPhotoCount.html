@@ -1,0 +1,9 @@
+{{/*
+  GetAlbumPhotoCount
+
+  Returns total album photo count from local page resources + external front matter images.
+*/}}
+
+{{ $resourceCount := len (.Resources.ByType "image") }}
+{{ $externalImages := partials.Include "func/GetAlbumExternalImages.html" . }}
+{{ return (add $resourceCount (len $externalImages)) }}

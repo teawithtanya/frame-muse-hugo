@@ -1,22 +1,5 @@
 {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
-{{ $resourceCount := len (.Resources.ByType "image") }}
-{{ $externalCount := 0 }}
-{{ range .Params.resources }}
-  {{ $src := printf "%v" .src }}
-  {{ if or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
-    {{ $externalCount = add $externalCount 1 }}
-  {{ end }}
-{{ end }}
-{{ range .Params.photos }}
-  {{ $src := printf "%v" .src }}
-  {{ if eq $src "<nil>" }}
-    {{ $src = printf "%v" .url }}
-  {{ end }}
-  {{ if and (ne $src "<nil>") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
-    {{ $externalCount = add $externalCount 1 }}
-  {{ end }}
-{{ end }}
-{{ $photoCount := add $resourceCount $externalCount }}
+{{ $photoCount := partials.Include "func/GetAlbumPhotoCount.html" . }}
 <article class="album-card">
   <a href="{{ .RelPermalink }}" class="album-link">
     <div class="album-cover">
