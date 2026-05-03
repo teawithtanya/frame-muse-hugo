@@ -5,7 +5,7 @@
   <div class="container">
     {{ $resourceImages := .Resources.ByType "image" }}
     {{ $externalImages := partials.Include "func/GetAlbumExternalImages.html" . }}
-    {{ $photoCount := partials.Include "func/GetAlbumPhotoCount.html" . }}
+    {{ $photoCount := add (len $resourceImages) (len $externalImages) }}
     <header class="page-header">
       <h2>{{ .Title }}</h2>
       <p class="subtitle">
