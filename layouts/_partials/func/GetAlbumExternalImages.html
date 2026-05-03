@@ -13,22 +13,19 @@
   {{ with .src }}
     {{ $src = printf "%v" . }}
   {{ end }}
-  {{ if and (ne $src "") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+  {{ $isRemote := or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
+  {{ if and (ne $src "") $isRemote }}
     {{ $externalImages = $externalImages | append (dict "src" $src "title" .title "description" .description "shape" .shape "params" .params) }}
   {{ end }}
 {{ end }}
 
 {{ range .Params.photos }}
   {{ $src := "" }}
-  {{ with .src }}
+  {{ with (or .src .url) }}
     {{ $src = printf "%v" . }}
   {{ end }}
-  {{ if eq $src "" }}
-    {{ with .url }}
-      {{ $src = printf "%v" . }}
-    {{ end }}
-  {{ end }}
-  {{ if and (ne $src "") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+  {{ $isRemote := or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
+  {{ if and (ne $src "") $isRemote }}
     {{ $externalImages = $externalImages | append (dict "src" $src "title" .title "description" .description "shape" .shape "params" .params) }}
   {{ end }}
 {{ end }}
