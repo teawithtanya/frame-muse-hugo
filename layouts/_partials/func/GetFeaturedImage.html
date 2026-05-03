@@ -20,9 +20,12 @@
 {{ $matches := "feature,cover" }}
 {{/* Use the value from front matter if present */}}
 {{ with .Params.featured_image }}
-  {{/* This is the default case, the image lives in the static directory.
-    In which case we'll use the static dir */}}
-  {{ $linkToCover = strings.Trim . "/" | urls.AbsURL }}
+  {{/* Use remote URLs as-is; otherwise resolve relative/static paths. */}}
+  {{ if or (strings.HasPrefix . "https://") (strings.HasPrefix . "http://") (strings.HasPrefix . "//") }}
+    {{ $linkToCover = . }}
+  {{ else }}
+    {{ $linkToCover = strings.Trim . "/" | urls.AbsURL }}
+  {{ end }}
   {{/* If we find a Page Resource matching the exact value, we use it instead. */}}
   {{ with $.Resources.GetMatch . }}
     {{ $linkToCover = .RelPermalink }}
@@ -32,6 +35,12 @@
   {{ with .Resources.ByType "image" }}
     {{ with .GetMatch (fmt.Printf "**{%s}*" $matches) }}
       {{ $linkToCover = .RelPermalink }}
+    {{ end }}
+  {{ end }}
+  {{ if eq $linkToCover "" }}
+    {{ $externalImages := partials.Include "func/GetAlbumExternalImages.html" . }}
+    {{ with first 1 $externalImages }}
+      {{ $linkToCover = (index . 0).src }}
     {{ end }}
   {{ end }}
 {{ end }}
