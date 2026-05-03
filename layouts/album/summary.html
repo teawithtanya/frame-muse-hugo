@@ -1,4 +1,22 @@
 {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
+{{ $resourceCount := len (.Resources.ByType "image") }}
+{{ $externalCount := 0 }}
+{{ range .Params.resources }}
+  {{ $src := printf "%v" .src }}
+  {{ if or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
+    {{ $externalCount = add $externalCount 1 }}
+  {{ end }}
+{{ end }}
+{{ range .Params.photos }}
+  {{ $src := printf "%v" .src }}
+  {{ if eq $src "<nil>" }}
+    {{ $src = printf "%v" .url }}
+  {{ end }}
+  {{ if and (ne $src "<nil>") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+    {{ $externalCount = add $externalCount 1 }}
+  {{ end }}
+{{ end }}
+{{ $photoCount := add $resourceCount $externalCount }}
 <article class="album-card">
   <a href="{{ .RelPermalink }}" class="album-link">
     <div class="album-cover">
@@ -16,7 +34,7 @@
       <div class="meta">
         <span class="date">{{ .Date | time.Format (compare.Default "Jan 2006" site.Params.date_format) }}</span>
         <span class="separator">&#8226;</span>
-        <span class="count">{{ len (.Resources.ByType "image") }} Photos</span>
+        <span class="count">{{ $photoCount }} Photos</span>
       </div>
     </div>
   </a>

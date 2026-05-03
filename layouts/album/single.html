@@ -3,23 +3,56 @@
 {{ define "main" }}
 <section class="gallery-container">
   <div class="container">
+    {{ $resourceImages := .Resources.ByType "image" }}
+    {{ $externalImages := slice }}
+    {{ range .Params.resources }}
+      {{ $src := printf "%v" .src }}
+      {{ if or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
+        {{ $externalImages = $externalImages | append . }}
+      {{ end }}
+    {{ end }}
+    {{ range .Params.photos }}
+      {{ $src := printf "%v" .src }}
+      {{ if eq $src "<nil>" }}
+        {{ $src = printf "%v" .url }}
+      {{ end }}
+      {{ if and (ne $src "<nil>") (or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//")) }}
+        {{ $externalImages = $externalImages | append . }}
+      {{ end }}
+    {{ end }}
+    {{ $photoCount := add (len $resourceImages) (len $externalImages) }}
     <header class="page-header">
       <h2>{{ .Title }}</h2>
       <p class="subtitle">
         {{ .Date | time.Format (compare.Default "Jan 2006" site.Params.date_format) }} &#8226;
-        {{ len (.Resources.ByType "image") }} Photos
+        {{ $photoCount }} Photos
       </p>
     </header>
 
     <div class="masonry-grid">
-      {{ $images := .Resources.ByType "image" }}
-      {{ if gt (len $images) 0 }}
-      {{ range $index, $img := $images }}
+      {{ if gt $photoCount 0 }}
+      {{ range $index, $img := $resourceImages }}
       {{ $title := $img.Title | compare.Default (printf "Photo %d" (add $index 1)) }}
       {{ $desc := $img.Params.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
       {{ $shape := compare.Conditional (ge $img.Width $img.Height) "landscape" "portrait" }}
       <div class="photo-item {{ $shape }}">
         <img src="{{ $img.RelPermalink }}" alt="{{ $title }}">
+        <div class="photo-overlay">
+          <h4>{{ $title }}</h4>
+          <p>{{ $desc }}</p>
+        </div>
+      </div>
+      {{ end }}
+      {{ range $index, $img := $externalImages }}
+      {{ $src := printf "%v" $img.src }}
+      {{ if eq $src "<nil>" }}
+        {{ $src = printf "%v" $img.url }}
+      {{ end }}
+      {{ $title := $img.title | compare.Default (printf "Photo %d" (add (len $resourceImages) (add $index 1))) }}
+      {{ $desc := $img.params.description | compare.Default $img.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
+      {{ $shape := $img.params.shape | compare.Default $img.shape | compare.Default "landscape" }}
+      <div class="photo-item {{ $shape }}">
+        <img src="{{ $src }}" alt="{{ $title }}">
         <div class="photo-overlay">
           <h4>{{ $title }}</h4>
           <p>{{ $desc }}</p>
