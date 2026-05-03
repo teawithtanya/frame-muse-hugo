@@ -1,7 +1,9 @@
 {{/*
   GetAlbumExternalImages
 
-  Returns normalized external image entries from front matter. Supports:
+  Returns normalized external image entries from front matter using only
+  remote/external URLs (http://, https://, or protocol-relative //).
+  Local/static paths are intentionally ignored. Supports:
   - [[resources]] with src
   - [[photos]] with src or url
 */}}
