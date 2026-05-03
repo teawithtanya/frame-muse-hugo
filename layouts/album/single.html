@@ -30,8 +30,18 @@
       {{ end }}
       {{ range $index, $img := $externalImages }}
       {{ $title := $img.title | compare.Default (printf "Photo %d" (add (len $resourceImages) (add $index 1))) }}
-      {{ $desc := $img.params.description | compare.Default $img.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
-      {{ $shape := $img.params.shape | compare.Default $img.shape | compare.Default "landscape" }}
+      {{ $paramsDesc := "" }}
+      {{ $paramsShape := "" }}
+      {{ with $img.params }}
+        {{ with .description }}
+          {{ $paramsDesc = . }}
+        {{ end }}
+        {{ with .shape }}
+          {{ $paramsShape = . }}
+        {{ end }}
+      {{ end }}
+      {{ $desc := $paramsDesc | compare.Default $img.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
+      {{ $shape := $paramsShape | compare.Default $img.shape | compare.Default "landscape" }}
       <div class="photo-item {{ $shape }}">
         <img src="{{ $img.src }}" alt="{{ $title }}">
         <div class="photo-overlay">
