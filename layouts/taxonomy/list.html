@@ -1,0 +1,19 @@
+{{ define "head" }}{{ partials.Include "frame-muse/head.html" . }}{{ end }}
+{{ define "header" }}{{ partials.Include "frame-muse/header.html" . }}{{ end }}
+{{ define "main" }}
+<section class="gallery-container">
+  <div class="container">
+    <header class="page-header">
+      <h2>{{ .Title | title }}</h2>
+      <p class="subtitle">{{ len .Pages }} {{ if eq (len .Pages) 1 }}album{{ else }}albums{{ end }}</p>
+    </header>
+
+    <div class="album-grid">
+      {{ range .Paginator.Pages }}
+      {{ .Render "summary" }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}
