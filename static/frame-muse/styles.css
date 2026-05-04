@@ -454,7 +454,9 @@ a {
     border-radius: 0 0 8px 8px;
 }
 
-.album-thumb:hover .album-thumb-title {
+.album-thumb:hover .album-thumb-title,
+.album-thumb:focus .album-thumb-title,
+.album-thumb:focus-within .album-thumb-title {
     opacity: 1;
 }
 
