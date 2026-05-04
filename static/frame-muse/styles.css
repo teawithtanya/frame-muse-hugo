@@ -471,8 +471,11 @@ ul {
     color: white;
     text-align: left;
     width: var(--lightbox-caption-width);
-    max-width: 20vw;
+    max-width: var(--lightbox-caption-width);
+    flex-shrink: 0;
     display: block;
+    overflow-y: auto;
+    max-height: calc(100vh - 4rem);
     opacity: 1;
     transition: opacity 0.3s ease;
 }
@@ -487,11 +490,6 @@ ul {
     margin: 0.5rem 0 0;
     color: #ccc;
     font-size: 0.95rem;
-}
-
-.lightbox-caption p::before {
-    content: "";
-    margin-right: 0;
 }
 
 .lightbox-close {
@@ -526,10 +524,14 @@ ul {
     opacity: 1;
 }
 
-.lightbox.hide-ui .lightbox-caption,
 .lightbox.hide-ui .lightbox-close,
 .lightbox.hide-ui .lightbox-nav {
     opacity: 0;
+    pointer-events: none;
+}
+
+.lightbox.hide-ui .lightbox-caption {
+    visibility: hidden;
     pointer-events: none;
 }
 
