@@ -20,7 +20,8 @@
       {{ $title := $img.Title | compare.Default (printf "Photo %d" (add $index 1)) }}
       {{ $desc := $img.Params.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
       {{ $shape := compare.Conditional (ge $img.Width $img.Height) "landscape" "portrait" }}
-      <div class="photo-item {{ $shape }}">
+      {{ $crop := $img.Params.crop }}
+      <div class="photo-item {{ $shape }}{{ with $crop }} crop-{{ . }}{{ end }}">
         <img src="{{ $img.RelPermalink }}" alt="{{ $title }}">
         <div class="photo-overlay">
           <h4>{{ $title }}</h4>
@@ -32,6 +33,7 @@
       {{ $title := $img.title | compare.Default (printf "Photo %d" (add (len $resourceImages) (add $index 1))) }}
       {{ $paramsDesc := "" }}
       {{ $paramsShape := "" }}
+      {{ $paramsCrop := "" }}
       {{ with $img.params }}
         {{ with .description }}
           {{ $paramsDesc = . }}
@@ -39,10 +41,14 @@
         {{ with .shape }}
           {{ $paramsShape = . }}
         {{ end }}
+        {{ with .crop }}
+          {{ $paramsCrop = . }}
+        {{ end }}
       {{ end }}
       {{ $desc := $paramsDesc | compare.Default $img.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
       {{ $shape := $paramsShape | compare.Default $img.shape | compare.Default "landscape" }}
-      <div class="photo-item {{ $shape }}">
+      {{ $crop := $paramsCrop | compare.Default $img.crop }}
+      <div class="photo-item {{ $shape }}{{ with $crop }} crop-{{ . }}{{ end }}">
         <img src="{{ $img.src }}" alt="{{ $title }}">
         <div class="photo-overlay">
           <h4>{{ $title }}</h4>
