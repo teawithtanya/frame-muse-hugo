@@ -3,8 +3,7 @@
   <video 
     controls 
     preload="metadata" 
-    width="100%" 
-    style="border-radius: {{ if .Get "caption" }}8px 8px 0 0{{ else }}8px{{ end }}; background: #000; display: block; margin-bottom: 0;"
+    style="width: 100%; height: auto; border-radius: {{ if .Get "caption" }}8px 8px 0 0{{ else }}8px{{ end }}; background: #000; display: block; margin-bottom: 0;"
     {{ with .Get "poster" }}poster="{{ . }}"{{ end }}
     {{ if ne (.Get "autoplay") "false" }}{{ if or (.Get "autoplay") (.Get "muted") }}autoplay muted loop playsinline{{ end }}{{ end }}
   >
