@@ -47,7 +47,7 @@
       {{ end }}
       {{ $desc := $paramsDesc | compare.Default $img.description | compare.Default $.Params.photo_description | compare.Default "Captured moments from this set." }}
       {{ $shape := $paramsShape | compare.Default $img.shape | compare.Default "landscape" }}
-      {{ $crop := $paramsCrop | compare.Default $img.crop }}
+      {{ $crop := $paramsCrop }}
       <div class="photo-item {{ $shape }}{{ with $crop }} crop-{{ . }}{{ end }}">
         <img src="{{ $img.src }}" alt="{{ $title }}">
         <div class="photo-overlay">
