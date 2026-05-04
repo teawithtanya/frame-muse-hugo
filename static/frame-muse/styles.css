@@ -722,3 +722,8 @@ a {
         margin: 0 auto;
     }
 }
+/* Cropping overrides for photo-item thumbnails */
+.photo-item.crop-top img { object-position: center top; }
+.photo-item.crop-bottom img { object-position: center bottom; }
+.photo-item.crop-left img { object-position: left center; }
+.photo-item.crop-right img { object-position: right center; }
