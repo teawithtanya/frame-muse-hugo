@@ -3,6 +3,7 @@ let uiVisible = true;
 
 const photos = Array.from(document.querySelectorAll('.photo-item'));
 const lightbox = document.getElementById('lightbox');
+const lightboxCaption = document.querySelector('.lightbox-caption');
 const lightboxImg = document.getElementById('lightbox-img');
 const lightboxTitle = document.getElementById('lightbox-title');
 const lightboxDesc = document.getElementById('lightbox-desc');
@@ -33,6 +34,7 @@ function openLightbox(index) {
   lightbox.classList.add('active');
   uiVisible = true;
   lightbox.classList.remove('hide-ui');
+  if (lightboxCaption) lightboxCaption.removeAttribute('aria-hidden');
   document.body.style.overflow = 'hidden';
 }
 
@@ -42,6 +44,7 @@ function closeLightbox() {
   }
 
   lightbox.classList.remove('active');
+  if (lightboxCaption) lightboxCaption.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
 
@@ -123,3 +126,24 @@ window.frameMuseLightbox = {
   closeLightbox,
   changeImage,
 };
+
+// Caption interactions: swipe to navigate on touch.
+if (lightboxCaption) {
+  let captionTouchStartX = 0;
+  let captionTouchEndX = 0;
+
+  lightboxCaption.addEventListener('touchstart', (e) => {
+    captionTouchStartX = e.changedTouches[0].screenX;
+  });
+
+  lightboxCaption.addEventListener('touchend', (e) => {
+    captionTouchEndX = e.changedTouches[0].screenX;
+    const swipeThreshold = 50;
+    if (captionTouchEndX < captionTouchStartX - swipeThreshold) {
+      changeImage(1);
+    }
+    if (captionTouchEndX > captionTouchStartX + swipeThreshold) {
+      changeImage(-1);
+    }
+  });
+}

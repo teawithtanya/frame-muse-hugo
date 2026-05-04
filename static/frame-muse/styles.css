@@ -549,11 +549,6 @@ ul {
     pointer-events: none;
 }
 
-.lightbox.hide-ui+.lightbox-caption {
-    opacity: 0;
-    pointer-events: none;
-}
-
 .lightbox-nav:hover {
     background: rgba(255, 255, 255, 0.2);
 }
@@ -601,6 +596,11 @@ ul {
         padding: 2rem 1rem calc(1rem + env(safe-area-inset-bottom));
         background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 60%, rgba(0, 0, 0, 0));
         text-align: center;
+    }
+
+    .lightbox.hide-ui+.lightbox-caption {
+        opacity: 0;
+        pointer-events: none;
     }
 }
 
