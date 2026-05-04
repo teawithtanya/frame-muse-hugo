@@ -1,0 +1,21 @@
+{{ define "head" }}{{ partials.Include "frame-muse/head.html" . }}{{ end }}
+{{ define "header" }}{{ partials.Include "frame-muse/header.html" . }}{{ end }}
+{{ define "main" }}
+{{ $albums := where .Pages "Type" "album" }}
+{{ $paginator := .Paginate $albums }}
+<section class="gallery-container">
+  <div class="container">
+    <header class="page-header">
+      <h2>{{ .Title | title }}</h2>
+      <p class="subtitle">{{ len $albums }} {{ if eq (len $albums) 1 }}album{{ else }}albums{{ end }}</p>
+    </header>
+
+    <div class="album-grid">
+      {{ range $paginator.Pages }}
+      {{ .Render "summary" }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}

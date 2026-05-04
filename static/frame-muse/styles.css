@@ -382,6 +382,14 @@ a {
     transform: scale(1.05);
 }
 
+.album-thumb-placeholder {
+    cursor: default;
+}
+
+.album-thumb-placeholder:hover img {
+    transform: none;
+}
+
 .album-thumb.more-overlay .overlay-count {
     position: absolute;
     inset: 0;
@@ -413,6 +421,58 @@ a {
     .albums-preview-grid {
         grid-template-columns: repeat(4, 1fr);
         gap: 0.5rem;
+    }
+}
+
+/* Browse by Tag section on home page */
+.tags-preview-section {
+    margin-bottom: 4rem;
+}
+
+.tag-row {
+    margin-bottom: 3rem;
+}
+
+.tag-row-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.tag-row-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.album-thumb-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 0.6rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.3;
+    opacity: 0;
+    transition: opacity 0.2s;
+    border-radius: 0 0 8px 8px;
+}
+
+.album-thumb:hover .album-thumb-title,
+.album-thumb:focus .album-thumb-title,
+.album-thumb:focus-within .album-thumb-title {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .tag-row-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
     }
 }
 
@@ -722,8 +782,20 @@ a {
         margin: 0 auto;
     }
 }
+
 /* Cropping overrides for photo-item thumbnails */
-.photo-item.crop-top img { object-position: center top; }
-.photo-item.crop-bottom img { object-position: center bottom; }
-.photo-item.crop-left img { object-position: left center; }
-.photo-item.crop-right img { object-position: right center; }
+.photo-item.crop-top img {
+    object-position: center top;
+}
+
+.photo-item.crop-bottom img {
+    object-position: center bottom;
+}
+
+.photo-item.crop-left img {
+    object-position: left center;
+}
+
+.photo-item.crop-right img {
+    object-position: right center;
+}
