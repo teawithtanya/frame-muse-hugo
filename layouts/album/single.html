@@ -89,6 +89,11 @@
       </div>
       {{ end }}
     </div>
+    {{ with .Content }}
+    <div class="album-content">
+      {{ . }}
+    </div>
+    {{ end }}
   </div>
 </section>
 
