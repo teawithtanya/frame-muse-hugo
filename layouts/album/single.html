@@ -5,7 +5,7 @@
   <div class="container">
     {{ $resourceImages := .Resources.ByType "image" }}
     {{ $externalImages := partials.Include "func/GetAlbumExternalImages.html" . }}
-    {{ $photoCount := add (len $resourceImages) (len $externalImages) }}
+    {{ $photoCount := partials.Include "func/GetAlbumPhotoCount.html" . }}
     <header class="page-header">
       <h2>{{ .Title }}</h2>
       <p class="subtitle">
@@ -96,11 +96,11 @@
   <button class="lightbox-close" onclick="window.frameMuseLightbox.closeLightbox()">&times;</button>
   <button class="lightbox-nav lightbox-prev" onclick="window.frameMuseLightbox.changeImage(-1)">&#10094;</button>
   <img src="" alt="" class="lightbox-content" id="lightbox-img">
-  <div class="lightbox-caption">
-    <h3 id="lightbox-title"></h3>
-    <p id="lightbox-desc"></p>
-  </div>
   <button class="lightbox-nav lightbox-next" onclick="window.frameMuseLightbox.changeImage(1)">&#10095;</button>
+</div>
+<div class="lightbox-caption" aria-hidden="true">
+  <h3 id="lightbox-title"></h3>
+  <p id="lightbox-desc"></p>
 </div>
 
 <script src="{{ "frame-muse/script.js" | urls.RelURL }}"></script>

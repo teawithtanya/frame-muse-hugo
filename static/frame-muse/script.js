@@ -3,6 +3,7 @@ let uiVisible = true;
 
 const photos = Array.from(document.querySelectorAll('.photo-item'));
 const lightbox = document.getElementById('lightbox');
+const lightboxCaption = document.querySelector('.lightbox-caption');
 const lightboxImg = document.getElementById('lightbox-img');
 const lightboxTitle = document.getElementById('lightbox-title');
 const lightboxDesc = document.getElementById('lightbox-desc');
@@ -33,6 +34,7 @@ function openLightbox(index) {
   lightbox.classList.add('active');
   uiVisible = true;
   lightbox.classList.remove('hide-ui');
+  if (lightboxCaption) lightboxCaption.removeAttribute('aria-hidden');
   document.body.style.overflow = 'hidden';
 }
 
@@ -42,6 +44,7 @@ function closeLightbox() {
   }
 
   lightbox.classList.remove('active');
+  if (lightboxCaption) lightboxCaption.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
 
@@ -90,22 +93,21 @@ if (lightbox) {
     }
   });
 
-  let touchStartX = 0;
-  let touchEndX = 0;
+  addSwipeNavigation(lightbox);
+}
 
-  lightbox.addEventListener('touchstart', (e) => {
+function addSwipeNavigation(element) {
+  let touchStartX = 0;
+
+  element.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
   });
 
-  lightbox.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
+  element.addEventListener('touchend', (e) => {
+    const delta = e.changedTouches[0].screenX - touchStartX;
     const swipeThreshold = 50;
-    if (touchEndX < touchStartX - swipeThreshold) {
-      changeImage(1);
-    }
-    if (touchEndX > touchStartX + swipeThreshold) {
-      changeImage(-1);
-    }
+    if (delta < -swipeThreshold) changeImage(1);
+    if (delta > swipeThreshold) changeImage(-1);
   });
 }
 
@@ -123,3 +125,8 @@ window.frameMuseLightbox = {
   closeLightbox,
   changeImage,
 };
+
+// Caption swipe-to-navigate on touch.
+if (lightboxCaption) {
+  addSwipeNavigation(lightboxCaption);
+}
