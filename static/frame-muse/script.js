@@ -130,19 +130,31 @@ window.frameMuseLightbox = {
 // Caption interactions: swipe to navigate on touch.
 if (lightboxCaption) {
   let captionTouchStartX = 0;
+  let captionTouchStartY = 0;
   let captionTouchEndX = 0;
+  let captionTouchEndY = 0;
 
   lightboxCaption.addEventListener('touchstart', (e) => {
     captionTouchStartX = e.changedTouches[0].screenX;
+    captionTouchStartY = e.changedTouches[0].screenY;
   });
 
   lightboxCaption.addEventListener('touchend', (e) => {
     captionTouchEndX = e.changedTouches[0].screenX;
+    captionTouchEndY = e.changedTouches[0].screenY;
+
+    const deltaX = captionTouchEndX - captionTouchStartX;
+    const deltaY = captionTouchEndY - captionTouchStartY;
     const swipeThreshold = 50;
-    if (captionTouchEndX < captionTouchStartX - swipeThreshold) {
+
+    if (Math.abs(deltaX) <= swipeThreshold || Math.abs(deltaX) <= Math.abs(deltaY)) {
+      return;
+    }
+
+    if (deltaX < 0) {
       changeImage(1);
     }
-    if (captionTouchEndX > captionTouchStartX + swipeThreshold) {
+    if (deltaX > 0) {
       changeImage(-1);
     }
   });
