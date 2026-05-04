@@ -382,6 +382,14 @@ a {
     transform: scale(1.05);
 }
 
+.album-thumb-placeholder {
+    cursor: default;
+}
+
+.album-thumb-placeholder:hover img {
+    transform: none;
+}
+
 .album-thumb.more-overlay .overlay-count {
     position: absolute;
     inset: 0;

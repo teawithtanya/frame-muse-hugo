@@ -19,9 +19,10 @@
         </div>
 
         {{ $albumPages := where site.RegularPages "Type" "album" }}
-        {{ if gt (len $albumPages) 0 }}
+        {{ $latestAlbums := first 6 (sort $albumPages "Date" "desc") }}
+        {{ if gt (len $latestAlbums) 0 }}
           <div class="albums-preview-grid">
-            {{ range first 8 $albumPages }}
+            {{ range $latestAlbums }}
               {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
               <a class="album-thumb" href="{{ .RelPermalink }}">
                 {{ if $featuredImage }}
@@ -34,14 +35,14 @@
           </div>
         {{ else }}
           <div class="albums-preview-grid">
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
-            <div class="album-thumb more-overlay">
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80" alt="Gallery Image"></div>
+            <div class="album-thumb album-thumb-placeholder more-overlay">
               <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" alt="Gallery Image">
               <div class="overlay-count">+12</div>
             </div>
@@ -49,6 +50,38 @@
         {{ end }}
       </div>
     </section>
+
+    {{ $allTags := site.Taxonomies.tags }}
+    {{ if $allTags }}
+    <section class="tags-preview-section">
+      <div class="container">
+        {{ range $allTags.ByCount }}
+          {{ $tagAlbums := where .Pages "Type" "album" }}
+          {{ if gt (len $tagAlbums) 0 }}
+          <div class="tag-row">
+            <div class="tag-row-header">
+              <h3 class="tag-row-title">{{ .Page.Title | title }}</h3>
+              <a href="{{ .Page.RelPermalink }}" class="view-all-link">View all &rarr;</a>
+            </div>
+            <div class="albums-preview-grid">
+              {{ range first 4 $tagAlbums }}
+                {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
+                <a class="album-thumb" href="{{ .RelPermalink }}">
+                  {{ if $featuredImage }}
+                    <img src="{{ $featuredImage }}" alt="{{ .Title }}">
+                  {{ else }}
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="{{ .Title }}">
+                  {{ end }}
+                  <div class="album-thumb-title">{{ .Title }}</div>
+                </a>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        {{ end }}
+      </div>
+    </section>
+    {{ end }}
   </section>
 {{ end }}
 {{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}
