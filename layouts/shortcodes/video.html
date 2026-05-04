@@ -1,13 +1,43 @@
-{{ $shape := .Get "shape" | default "landscape" }}
+{{ $src := .Get "src" }}
+{{ if not $src }}
+  {{ errorf "Missing 'src' parameter in video shortcode: %s" .Position }}
+{{ else }}
+  {{ $shape := .Get "shape" | default "landscape" }}
+
+  {{/* Normalize src URL */}}
+  {{ $normalizedSrc := "" }}
+  {{ if or (strings.HasPrefix $src "https://") (strings.HasPrefix $src "http://") (strings.HasPrefix $src "//") }}
+    {{ $normalizedSrc = $src }}
+  {{ else }}
+    {{ $normalizedSrc = strings.Trim $src "/" | urls.AbsURL }}
+  {{ end }}
+
+  {{/* Normalize poster URL */}}
+  {{ $normalizedPoster := "" }}
+  {{ with .Get "poster" }}
+    {{ if or (strings.HasPrefix . "https://") (strings.HasPrefix . "http://") (strings.HasPrefix . "//") }}
+      {{ $normalizedPoster = . }}
+    {{ else }}
+      {{ $normalizedPoster = strings.Trim . "/" | urls.AbsURL }}
+    {{ end }}
+  {{ end }}
+
+  {{/* Parse boolean flags */}}
+  {{ $isAutoplay := or (eq (.Get "autoplay") "true") (eq (.Get "autoplay") true) }}
+  {{ $isMuted := or (eq (.Get "muted") "true") (eq (.Get "muted") true) }}
+  {{ $isLoop := or (eq (.Get "loop") "true") (eq (.Get "loop") true) }}
+
 <figure class="video-container video-{{ $shape }}" style="margin: 2rem auto; {{ if eq $shape "portrait" }}max-width: 400px;{{ else }}max-width: 100%;{{ end }}">
   <video 
     controls 
     preload="metadata" 
     style="width: 100%; height: auto; border-radius: {{ if .Get "caption" }}8px 8px 0 0{{ else }}8px{{ end }}; background: #000; display: block; margin-bottom: 0;"
-    {{ with .Get "poster" }}poster="{{ . }}"{{ end }}
-    {{ if ne (.Get "autoplay") "false" }}{{ if or (.Get "autoplay") (.Get "muted") }}autoplay muted loop playsinline{{ end }}{{ end }}
+    {{ with $normalizedPoster }}poster="{{ . }}"{{ end }}
+    {{ if $isAutoplay }}autoplay playsinline{{ end }}
+    {{ if or $isAutoplay $isMuted }} muted{{ end }}
+    {{ if $isLoop }} loop{{ end }}
   >
-    <source src="{{ .Get "src" }}" type="{{ .Get "type" | default "video/mp4" }}">
+    <source src="{{ $normalizedSrc }}" type="{{ .Get "type" | default "video/mp4" }}">
     Your browser does not support the video tag.
   </video>
   {{ with .Get "caption" }}
@@ -16,3 +46,4 @@
   </figcaption>
   {{ end }}
 </figure>
+{{ end }}
