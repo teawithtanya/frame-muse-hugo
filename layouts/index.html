@@ -64,7 +64,7 @@
               <a href="{{ .Page.RelPermalink }}" class="view-all-link">View all &rarr;</a>
             </div>
             <div class="albums-preview-grid">
-              {{ range first 4 $tagAlbums }}
+              {{ range first 6 $tagAlbums }}
                 {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
                 <a class="album-thumb" href="{{ .RelPermalink }}">
                   {{ if $featuredImage }}
@@ -73,6 +73,11 @@
                     <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="{{ .Title }}">
                   {{ end }}
                   <div class="album-thumb-title">{{ .Title }}</div>
+                </a>
+              {{ end }}
+              {{ if gt (len $tagAlbums) 6 }}
+                <a class="album-thumb tag-count-tile" href="{{ .Page.RelPermalink }}">
+                  <span>View {{ len $tagAlbums }} albums</span>
                 </a>
               {{ end }}
             </div>

@@ -12,6 +12,7 @@
         {{ .Date | time.Format (compare.Default "Jan 2006" site.Params.date_format) }} &#8226;
         {{ $photoCount }} Photos
       </p>
+      {{ with .Description }}<p class="album-description">{{ . }}</p>{{ end }}
     </header>
 
     <div class="masonry-grid">
