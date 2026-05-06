@@ -17,7 +17,7 @@
     {{ range $yearGroups }}
       {{ $year := .Key }}
       {{ $yearAlbums := .Pages }}
-      {{ $yearPage := site.GetPage (printf "/albums/%s" $year) }}
+      {{ $yearURL := printf "/albums/%s/" $year }}
       <div class="tag-row">
         <div class="tag-row-header">
           <h3 class="tag-row-title">{{ $year }}</h3>
@@ -34,8 +34,8 @@
               <div class="album-thumb-title">{{ .Title }}</div>
             </a>
           {{ end }}
-          {{ if and (gt (len $yearAlbums) 6) $yearPage }}
-            <a class="album-thumb tag-count-tile" href="{{ $yearPage.RelPermalink }}">
+          {{ if gt (len $yearAlbums) 6 }}
+            <a class="album-thumb tag-count-tile" href="{{ $yearURL }}">
               <span>View {{ len $yearAlbums }} albums</span>
             </a>
           {{ end }}
