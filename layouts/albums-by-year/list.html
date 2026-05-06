@@ -1,0 +1,48 @@
+{{ define "head" }}{{ partials.Include "frame-muse/head.html" . }}{{ end }}
+{{ define "header" }}{{ partials.Include "frame-muse/header.html" . }}{{ end }}
+{{ define "main" }}
+<section class="gallery-container">
+  <div class="container">
+    <header class="page-header">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.subtitle }}
+      <p class="subtitle">{{ . }}</p>
+      {{ else }}
+      <p class="subtitle">Browse albums grouped by year.</p>
+      {{ end }}
+    </header>
+
+    {{ $allAlbums := sort (where site.RegularPages "Type" "album") "Date" "desc" }}
+    {{ $yearGroups := $allAlbums.GroupByDate "2006" }}
+    {{ range $yearGroups }}
+      {{ $year := .Key }}
+      {{ $yearAlbums := .Pages }}
+      {{ $yearPage := site.GetPage (printf "/albums/%s" $year) }}
+      <div class="tag-row">
+        <div class="tag-row-header">
+          <h3 class="tag-row-title">{{ $year }}</h3>
+        </div>
+        <div class="albums-preview-grid">
+          {{ range first 6 $yearAlbums }}
+            {{ $featuredImage := partials.Include "func/GetFeaturedImage.html" . }}
+            <a class="album-thumb" href="{{ .RelPermalink }}">
+              {{ if $featuredImage }}
+                <img src="{{ $featuredImage }}" alt="{{ .Title }}">
+              {{ else }}
+                <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="{{ .Title }}">
+              {{ end }}
+              <div class="album-thumb-title">{{ .Title }}</div>
+            </a>
+          {{ end }}
+          {{ if and (gt (len $yearAlbums) 6) $yearPage }}
+            <a class="album-thumb tag-count-tile" href="{{ $yearPage.RelPermalink }}">
+              <span>View {{ len $yearAlbums }} albums</span>
+            </a>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ define "footer" }}{{ partials.Include "frame-muse/footer.html" . }}{{ end }}
